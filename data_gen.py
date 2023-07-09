@@ -5,8 +5,9 @@ mu_t, sigma_t = 0, 1
 t = np.random.normal(mu_t, sigma_t, size)
 mu_fr, sigma_fr = 0, 5
 fr = np.random.normal(mu_fr, sigma_fr, size)
-mu_st, sigma_st = 0.01, 5
-st = np.random.lognormal(mu_st, sigma_st, size)
+start_st, end_st = 0.01, 5
+st = np.logspace(start_st, end_st, size, endpoint = True)
+
 # the function that we generate the data with
 def f(t, st, fr):
     return st**2 * (fr * ((1- t)/st - np.exp(-t/st)))
