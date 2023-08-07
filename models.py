@@ -15,8 +15,8 @@ class SciNet(nn.Module):
 		"""
 		super(SciNet, self).__init__()
 		self.latent_dim = latent_dim
-		self.enc1 = nn.Linear(input_dim, layer_dim)
-		self.enc2 = nn.Linear(layer_dim, layer_dim)
+		self.enc1 = nn.Linear(input_dim, layer_dim*2)
+		self.enc2 = nn.Linear(layer_dim*2, layer_dim)
 		self.latent = nn.Linear(layer_dim, latent_dim*2)
 		self.dec1 = nn.Linear(latent_dim+1, layer_dim)
 		self.dec2 = nn.Linear(layer_dim,layer_dim)

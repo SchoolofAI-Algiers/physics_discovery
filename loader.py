@@ -4,9 +4,10 @@ from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 
 class CustomTimeSeriesDataset(Dataset):
-    def __init__(self, csv_file_path, transform=None):
+    def __init__(self, csv_file_path, size, transform=None):
         self.data_frame = pd.read_csv(csv_file_path)
         self.transform = transform
+        self.size = size
 
     def __len__(self):
         return len(self.data_frame)
@@ -15,7 +16,7 @@ class CustomTimeSeriesDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
 
-        time_series = self.data_frame.iloc[idx, 1:50].values.astype('float32')
+        time_series = self.data_frame.iloc[idx, 1:self.size+1].values.astype('float32')
         fr_feature = self.data_frame.iloc[idx, -4].astype('float32')
         st_feature = self.data_frame.iloc[idx, -3].astype('float32')
         question = self.data_frame.iloc[idx, -2].astype('float32')
@@ -34,10 +35,10 @@ class CustomTimeSeriesDataset(Dataset):
 
         return sample
 
-def build_dataloader(batch_size = 32):
+def build_dataloader(batch_size = 32, size = 100):
     # DataLoader example
     csv_file_path = 'data.csv'
-    custom_dataset = CustomTimeSeriesDataset(csv_file_path)
+    custom_dataset = CustomTimeSeriesDataset(csv_file_path, size)
     data_loader = DataLoader(custom_dataset, batch_size=batch_size, shuffle=True)
 
     return data_loader
@@ -45,7 +46,8 @@ def build_dataloader(batch_size = 32):
 if __name__ == "__main__":
     # Assuming you have 'data.csv' in the current directory
     csv_file_path = 'data.csv'
-    custom_dataset = CustomTimeSeriesDataset(csv_file_path)
+    size = 100
+    custom_dataset = CustomTimeSeriesDataset(csv_file_path, size)
 
     # Accessing a single sample from the dataset
     sample = custom_dataset[0]
